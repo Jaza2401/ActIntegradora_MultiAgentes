@@ -10,10 +10,16 @@ from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import math
 
-# Se carga el archivo de la clase Cubo
+# Se carga el archivo de la clase Carrito
 import sys
 sys.path.append('..')
 from Carrito import Carrito
+from Caja import Caja
+
+# Se carga el archivo de la clase Caja
+
+# Se carga la librería de agentpy
+import agentpy as ap
 
 screen_width = 500
 screen_height = 500
@@ -50,6 +56,10 @@ pygame.init()
 #cubo = Cubo(DimBoard, 1.0)
 cubos = []
 ncubos = 3
+
+#cajas = Caja(DimBoard, 1.0)
+cajas = []
+ncajas = 5
 
 def Axis():
     glShadeModel(GL_FLAT)
@@ -102,6 +112,12 @@ def Init():
     for i in range(ncubos):
         cubos.append(Carrito(DimBoard, 1))
         
+    for i in range(ncajas):
+        cajas.append(Caja(DimBoard, 1))
+        
+    for caja in cajas:
+        caja.cajas = cajas
+        
     for obj in cubos:
         obj.cubos = cubos
 
@@ -120,6 +136,9 @@ def display():
     for obj in cubos:
         obj.draw()
         obj.update()
+        
+    for caja in cajas:
+        caja.draw()
     
 def handle_keys():
     global CENTER_X, CENTER_Y, CENTER_Z, EYE_Y, theta
