@@ -92,7 +92,7 @@ class Caja:
         glPushMatrix()
         glTranslatef(self.Position[0], self.Position[1], self.Position[2])
         glScaled(1,1,1)
-        glColor3f(0.647, 0.165, 0.165); 
+        glColor3f(0.5, 0.3, 0.1); 
         self.drawFaces()
         glPopMatrix()
         
