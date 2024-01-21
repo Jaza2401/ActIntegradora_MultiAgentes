@@ -17,28 +17,28 @@ class Carrito:
     
     def __init__(self, dim, vel):
         #vertices del cubo
-        self.base = np.array([[-1.0, 0.0, 1.0], [1.0, 0.0, 1.0], [1.0, 0.0,-1.0], [-1.0, 0.0,-1.0],
-                                [-1.0, 0.5, 1.0], [1.0, 0.5, 1.0], [1.0, 0.5,-1.0], [-1.0, 0.5,-1.0]])
+        self.base = np.array([[-1.0, 0.5, 1.0], [1.0, 0.5, 1.0], [1.0, 0.5,-1.0], [-1.0, 0.5,-1.0],
+                                [-1.0, 1, 1.0], [1.0, 1, 1.0], [1.0, 1,-1.0], [-1.0, 1,-1.0]])
 
-        self.pillar1 = np.array([[-0.8, 0.5, 0.8], [-0.8, 0.5, 1.0], [-1.0, 0.5, 1.0], [-1.0, 0.5, 0.8],
-                               [-0.8, 3.0, 0.8], [-0.8, 3.0, 1.0], [-1.0, 3.0, 1.0], [-1.0, 3.0, 0.8]])
+        self.pillar1 = np.array([[-0.8, 1, 0.8], [-0.8, 1, 1.0], [-1.0, 1, 1.0], [-1.0, 1, 0.8],
+                               [-0.8, 3.5, 0.8], [-0.8, 3.5, 1.0], [-1.0, 3.5, 1.0], [-1.0, 3.5, 0.8]])
         
-        self.pillar2 = np.array([[1.0, 0.5, 0.8], [1.0, 0.5, 1.0], [0.8, 0.5, 1.0], [0.8, 0.5, 0.8],
-                               [1.0, 3.0, 0.8], [1.0, 3.0, 1.0], [0.8, 3.0, 1.0], [0.8, 3.0, 0.8]])
+        self.pillar2 = np.array([[1.0, 1, 0.8], [1.0, 1, 1.0], [0.8, 1, 1.0], [0.8, 1, 0.8],
+                               [1.0, 3.5, 0.8], [1.0, 3.5, 1.0], [0.8, 3.5, 1.0], [0.8, 3.5, 0.8]])
         
-        self.pillar3 = np.array([[1.0, 0.5, -1.0], [1.0, 0.5, -0.8], [0.8, 0.5, -0.8], [0.8, 0.5, -1.0],
-                               [1.0, 3.0, -1.0], [1.0, 3.0, -0.8], [0.8, 3.0, -0.8], [0.8, 3.0, -1.0]])
+        self.pillar3 = np.array([[1.0, 1, -1.0], [1.0, 1, -0.8], [0.8, 1, -0.8], [0.8, 1, -1.0],
+                               [1.0, 3.5, -1.0], [1.0, 3.5, -0.8], [0.8, 3.5, -0.8], [0.8, 3.5, -1.0]])
         
-        self.pillar4 = np.array([[-0.8, 0.5, -1.0], [-0.8, 0.5, -0.8], [-1.0, 0.5, -0.8], [-1.0, 0.5, -1.0],
-                               [-0.8, 3.0, -1.0], [-0.8, 3.0, -0.8], [-1.0, 3.0, -0.8], [-1.0, 3.0, -1.0]])
+        self.pillar4 = np.array([[-0.8, 1, -1.0], [-0.8, 1, -0.8], [-1.0, 1, -0.8], [-1.0, 1, -1.0],
+                               [-0.8, 3.5, -1.0], [-0.8, 3.5, -0.8], [-1.0, 3.5, -0.8], [-1.0, 3.5, -1.0]])
         
-        self.roof = np.array([[-1.0, 3.0, 1.0], [1.0, 3.0, 1.0], [1.0, 3.0,-1.0], [-1.0, 3.0,-1.0],
-                                [-1.0, 3.3, 1.0], [1.0, 3.3, 1.0], [1.0, 3.3,-1.0], [-1.0, 3.3,-1.0]])
+        self.roof = np.array([[-1.0, 3.5, 1.0], [1.0, 3.5, 1.0], [1.0, 3.5,-1.0], [-1.0, 3.5,-1.0],
+                                [-1.0, 3.8, 1.0], [1.0, 3.8, 1.0], [1.0, 3.8,-1.0], [-1.0, 3.8,-1.0]])
         
-        self.front = np.array([[1.05, 0.0, 1.5], [1.05, 0.0, -1.5], [1.05, 4.5, -1.5], [1.05, 4.5, 1.5]])
-        
+        self.front = np.array([[1.05, 0.5, 1.5], [1.05, 0.5, -1.5], [1.05, 5, -1.5], [1.05, 5, 1.5]])
+
         self.scale = 1
-        self.radius = math.sqrt(self.scale**2 + self.scale**2)
+        self.radius = math.sqrt(self.scale**2 + self.scale**2) *2 
         self.DimBoard = dim
         #Se inicializa una posicion aleatoria en el tablero
         self.Position = []
@@ -89,7 +89,18 @@ class Carrito:
             self.Direction = [0.0, 0.0, 0.0]
         self.dCol = 0
         
-        
+    def drawCircle(self, radius, num_segments):
+        glBegin(GL_POLYGON)
+
+        for i in range(num_segments):
+            theta = 2.0 * math.pi * float(i) / float(num_segments)
+
+            x = radius * math.cos(theta)
+            y = radius * math.sin(theta)
+
+            glVertex3f(x, y, 0.0)
+
+        glEnd()
 
     def drawFaces(self):
         
@@ -365,6 +376,31 @@ class Carrito:
         glVertex3fv(self.front[2])
         glVertex3fv(self.front[3])
         glEnd()
+
+        # llantas
+        glPushMatrix()
+        glTranslatef(-0.8, 0.5, 1.1)
+        glColor3f(0.2, 0.1, 0.0)
+        self.drawCircle(0.2, 50)
+        glPopMatrix()
+
+        glPushMatrix()
+        glTranslatef(0.8, 0.5, 1.1)
+        glColor3f(0.2, 0.1, 0.0)
+        self.drawCircle(0.2, 50)
+        glPopMatrix()
+
+        glPushMatrix()
+        glTranslatef(0.8, 0.5, -1.1)
+        glColor3f(0.2, 0.1, 0.0)
+        self.drawCircle(0.2, 50)
+        glPopMatrix()
+
+        glPushMatrix()
+        glTranslatef(-0.8, 0.5, -1.1)
+        glColor3f(0.2, 0.1, 0.0)
+        self.drawCircle(0.2, 50)
+        glPopMatrix()
         
     
     def draw(self):
