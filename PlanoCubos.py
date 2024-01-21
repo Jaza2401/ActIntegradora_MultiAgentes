@@ -132,13 +132,18 @@ def display():
     glVertex3d(DimBoard, 0, DimBoard)
     glVertex3d(DimBoard, 0, -DimBoard)
     glEnd()
+    
+    for caja in cajas:
+        caja.draw()
+
     #Se dibuja cubos
     for obj in cubos:
         obj.draw()
         obj.update()
-        
-    for caja in cajas:
-        caja.draw()
+
+    for cubo in cubos:
+        for caja in cajas:
+            caja.detCol(cubo.Position[0], cubo.Position[2], cubo.radius)
     
 def handle_keys():
     global CENTER_X, CENTER_Y, CENTER_Z, EYE_Y, theta

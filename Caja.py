@@ -96,13 +96,12 @@ class Caja:
         self.drawFaces()
         glPopMatrix()
         
-    def detCol(self, new_x, new_z):
-        for cubo in self.cubos:
-            if cubo is not self:
-                r1 = self.radius
-                r2 = cubo.radius
-                cx = (cubo.Position[0] - new_x)**2
-                cz = (cubo.Position[2] - new_z)**2
-                de = math.sqrt(cx + cz)
-                if de - (r1 + r2) < 0.0:
-                    self.dCol = 1
+    def detCol(self, new_x, new_z, radio):
+        # Calcula la distancia entre el carrito y la caja
+        dx = self.Position[0] - new_x
+        dz = self.Position[2] - new_z
+        distance = math.sqrt(dx**2 + dz**2)
+
+        # Verifica si hay colisión comparando con el radio del carrito
+        if distance < (self.radius + radio):
+            print("colision")

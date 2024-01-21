@@ -57,10 +57,11 @@ class Carrito:
         #Se cambia la maginitud del vector direccion
         self.Direction[0] *= vel
         self.Direction[2] *= vel
-        #Colision
+        #Colision con otros carritos
         self.cubos = []
         self.dCol = 0
-        
+        #Estado
+        self.estado = 0
 
     def update(self):
         new_x = self.Position[0] + self.Direction[0]
@@ -85,8 +86,10 @@ class Carrito:
                 self.Direction[2] *= -1.0
                 #self.Position[2] += self.Direction[2] 
         else:
-            # Hay colisión, detiene el cubo
-            self.Direction = [0.0, 0.0, 0.0]
+            # rebote
+            self.Direction[0] *= -1.0
+            self.Direction[2] *= -1.0
+            print("colision con carro")
         self.dCol = 0
         
     def drawCircle(self, radius, num_segments):
