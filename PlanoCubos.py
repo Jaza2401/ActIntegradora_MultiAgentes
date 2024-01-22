@@ -235,7 +235,7 @@ class Environment(ap.Area):
         pass
         #Logica de actualizacion
 
-
+model = Model()
 done = False
 Init()
 while not done:
@@ -244,6 +244,7 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
 
+    #model.step()
     display()
 
     pygame.display.flip()
