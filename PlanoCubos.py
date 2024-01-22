@@ -49,13 +49,13 @@ Z_MAX=500
 DimBoard = 50
 #Variables para el control del observador
 theta = 0.0
-radius = DimBoard
+radius = DimBoard + 10
 
 pygame.init()
 
 #carrito = carrito(DimBoard, 1.0)
 carritos = []
-ncarritos = 3
+ncarritos = 5
 
 #cajas = Caja(DimBoard, 1.0)
 cajas = []
@@ -173,69 +173,46 @@ def handle_keys():
     #     lookat()
 
 
-'''Igual aqui se inicia todo, se configura a los agentes y el entorno
-   no se que tan necesario es pero aja'''
-class Model(ap.Model):
-
-    def setup(self):
-        #Configurar agentes y entorno
-        pass
-    def setp(self):
-        #Logica y cada paso 
-        pass
-
 '''Aqui tendriamos que poner toda la logica del agente junto con su comportamiento
    igual tenemos que actualizar los valores de cada agente para que se pueda
    mostrar en el motor grafico'''
 class CarritoAgent(ap.Agent):
 
-    def setup(self):
-        self.liftting = 0 # Empty = 0, With box = 1
-        self.targetFound = 0 # No = 0, Yes = 1
+    def __init__(self, position, speed):
+        self.position = position
+        self.speed = speed
 
     def step(self):
         #Poner el next y action
+        p = self.see(self.model.world)
+        self.next(p)
+        self.action()
         pass
 
     def update(self):
         pass
 
-    def end(self):
-        pass
-
-    def see(self):
+    def see(self, c):
         #Logica para buscar caja cercana
+        #Deteccion de colisiones
         pass
 
     def next(self):
-        #Ir cambiando los estados de liffting o targetFound
+        #Si se detecto colision cambiar variable o sino que siga igual
         pass
 
     def action(self):
-        #Poner aqui animacion del carrito y movimiento
+        #Depende si se detecto colision, si no hubo, que siga igual 
+        #Aqui va move()
+        #Aqui se elimina las cajas del suelo 
         pass
 
     def move(self):
         #Definir el movimiento del carrito, incluido cuando encuentra una caja
         pass
 
+#model = CarritoAgent()
 
-'''Aqui podriamos definir el area de lo que pueda ver el agente aunque
-   no es totalmente necesario''' 
-class Environment(ap.Area):
-    def __init__(self, Model):
-        #Configurar propiedades del area
-        pass
-
-    def setup(self):
-        pass
-        #Configurar inicializacion del area
-
-    def update(self):
-        pass
-        #Logica de actualizacion
-
-model = Model()
 done = False
 Init()
 while not done:

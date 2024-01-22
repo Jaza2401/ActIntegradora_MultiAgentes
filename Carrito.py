@@ -15,7 +15,6 @@ from OpenGL.GLUT import *
 
 
 class Carrito:
-    
     def __init__(self, dim, vel):
         #vertices del cubo
         self.base = np.array([[-1.0, 0.5, 1.0], [1.0, 0.5, 1.0], [1.0, 0.5,-1.0], [-1.0, 0.5,-1.0],
