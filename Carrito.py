@@ -37,7 +37,11 @@ class Carrito:
         
         self.front = np.array([[1.05, 0.5, 1.5], [1.05, 0.5, -1.5], [1.05, 5, -1.5], [1.05, 5, 1.5]])
 
+        self.platform = np.array([[3.05, 0.5, 1.0], [1.05, 0.5, 1.0], [1.05, 0.5,-1.0], [3.05, 0.5,-1.0],
+                                [3.05, 0.7, 1.0], [1.05, 0.7, 1.0], [1.05, 0.7,-1.0], [3.05, 0.7,-1.0]])
+
         self.scale = 1
+        self.ymin = 0
         self.radius = math.sqrt(self.scale**2 + self.scale**2) *2 
         self.DimBoard = dim
         #Se inicializa una posicion aleatoria en el tablero
@@ -380,28 +384,72 @@ class Carrito:
         glVertex3fv(self.front[3])
         glEnd()
 
-        # llantas
+        #Plataforma
+        glBegin(GL_QUADS)
+        glColor3f(255.0, 233.0, 0.0)
+        glVertex3fv(self.platform[0])
+        glVertex3fv(self.platform[1])
+        glVertex3fv(self.platform[2])
+        glVertex3fv(self.platform[3])
+        glEnd()
+        glBegin(GL_QUADS)
+        glColor3f(255.0, 233.0, 0.0)
+        glVertex3fv(self.platform[4])
+        glVertex3fv(self.platform[5])
+        glVertex3fv(self.platform[6])
+        glVertex3fv(self.platform[7])
+        glEnd()
+        glBegin(GL_QUADS)
+        glColor3f(255.0, 233.0, 0.0)
+        glVertex3fv(self.platform[0])
+        glVertex3fv(self.platform[1])
+        glVertex3fv(self.platform[5])
+        glVertex3fv(self.platform[4])
+        glEnd()
+        glBegin(GL_QUADS)
+        glColor3f(255.0, 233.0, 0.0)
+        glVertex3fv(self.platform[1])
+        glVertex3fv(self.platform[2])
+        glVertex3fv(self.platform[6])
+        glVertex3fv(self.platform[5])
+        glEnd()
+        glBegin(GL_QUADS)
+        glColor3f(255.0, 233.0, 0.0)
+        glVertex3fv(self.platform[2])
+        glVertex3fv(self.platform[3])
+        glVertex3fv(self.platform[7])
+        glVertex3fv(self.platform[6])
+        glEnd()
+        glBegin(GL_QUADS)
+        glColor3f(255.0, 233.0, 0.0)
+        glVertex3fv(self.platform[3])
+        glVertex3fv(self.platform[0])
+        glVertex3fv(self.platform[4])
+        glVertex3fv(self.platform[7])
+        glEnd()
+
+        #Llantas
         glPushMatrix()
         glTranslatef(-0.8, 0.5, 1.1)
-        glColor3f(0.2, 0.1, 0.0)
+        glColor3f(182.0, 149.0, 192.0)
         self.drawCircle(0.2, 50)
         glPopMatrix()
 
         glPushMatrix()
         glTranslatef(0.8, 0.5, 1.1)
-        glColor3f(0.2, 0.1, 0.0)
+        glColor3f(182.0, 149.0, 192.0)
         self.drawCircle(0.2, 50)
         glPopMatrix()
 
         glPushMatrix()
         glTranslatef(0.8, 0.5, -1.1)
-        glColor3f(0.2, 0.1, 0.0)
+        glColor3f(182.0, 149.0, 192.0)
         self.drawCircle(0.2, 50)
         glPopMatrix()
 
         glPushMatrix()
         glTranslatef(-0.8, 0.5, -1.1)
-        glColor3f(0.2, 0.1, 0.0)
+        glColor3f(182.0, 149.0, 192.0)
         self.drawCircle(0.2, 50)
         glPopMatrix()
         
