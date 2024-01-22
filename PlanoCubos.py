@@ -59,7 +59,7 @@ ncarritos = 5
 
 #cajas = Caja(DimBoard, 1.0)
 cajas = []
-ncajas = 5
+ncajas = 50
 
 def Axis():
     glShadeModel(GL_FLAT)
@@ -114,12 +114,6 @@ def Init():
         
     for i in range(ncajas):
         cajas.append(Caja(DimBoard, 1))
-        
-    for caja in cajas:
-        caja.cajas = cajas
-        
-    for obj in carritos:
-        obj.carritos = carritos
 
 def display():  
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -161,30 +155,18 @@ def handle_keys():
         else:
             theta += 1.0
         lookat()
-    # if keys[pygame.K_UP]:
-    #     EYE_Y -= 0.2
-    #     CENTER_X -= 0.1 * math.sin(math.radians(theta))
-    #     CENTER_Z -= 0.1 * math.cos(math.radians(theta))
-    #     lookat()
-    # if keys[pygame.K_DOWN]:
-    #     EYE_Y += 0.2
-    #     CENTER_X += 0.1 * math.sin(math.radians(theta))
-    #     CENTER_Z += 0.1 * math.cos(math.radians(theta))
-    #     lookat()
-
 
 '''Aqui tendriamos que poner toda la logica del agente junto con su comportamiento
    igual tenemos que actualizar los valores de cada agente para que se pueda
    mostrar en el motor grafico'''
 class CarritoAgent(ap.Agent):
 
-    def __init__(self, position, speed):
+    def __init__(self, position):
         self.position = position
-        self.speed = speed
 
-    def step(self):
+    def step(self, cajas):
         #Poner el next y action
-        p = self.see(self.model.world)
+        p = self.see(cajas)
         self.next(p)
         self.action()
         pass
@@ -211,8 +193,6 @@ class CarritoAgent(ap.Agent):
         #Definir el movimiento del carrito, incluido cuando encuentra una caja
         pass
 
-#model = CarritoAgent()
-
 done = False
 Init()
 while not done:
@@ -221,7 +201,6 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
 
-    #model.step()
     display()
 
     pygame.display.flip()
