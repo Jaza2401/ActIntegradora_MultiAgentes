@@ -53,9 +53,9 @@ radius = DimBoard
 
 pygame.init()
 
-#cubo = Cubo(DimBoard, 1.0)
-cubos = []
-ncubos = 3
+#carrito = carrito(DimBoard, 1.0)
+carritos = []
+ncarritos = 3
 
 #cajas = Caja(DimBoard, 1.0)
 cajas = []
@@ -96,7 +96,7 @@ def lookat():
 def Init():
     screen = pygame.display.set_mode(
         (screen_width, screen_height), DOUBLEBUF | OPENGL)
-    pygame.display.set_caption("OpenGL: cubos")
+    pygame.display.set_caption("OpenGL: carritos")
 
     glMatrixMode(GL_PROJECTION)
     glLoadIdentity()
@@ -109,8 +109,8 @@ def Init():
     glEnable(GL_DEPTH_TEST)
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
     
-    for i in range(ncubos):
-        cubos.append(Carrito(DimBoard, 1))
+    for i in range(ncarritos):
+        carritos.append(Carrito(DimBoard, 1))
         
     for i in range(ncajas):
         cajas.append(Caja(DimBoard, 1))
@@ -118,8 +118,8 @@ def Init():
     for caja in cajas:
         caja.cajas = cajas
         
-    for obj in cubos:
-        obj.cubos = cubos
+    for obj in carritos:
+        obj.carritos = carritos
 
 def display():  
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -136,14 +136,14 @@ def display():
     for caja in cajas:
         caja.draw()
 
-    #Se dibuja cubos
-    for obj in cubos:
+    #Se dibuja carritos
+    for obj in carritos:
         obj.draw()
         obj.update()
 
-    for cubo in cubos:
+    for carrito in carritos:
         for caja in cajas:
-            caja.detCol(cubo.Position[0], cubo.Position[2], cubo.radius)
+            caja.detCol(carrito.Position[0], carrito.Position[2], carrito.radius)
     
 def handle_keys():
     global CENTER_X, CENTER_Y, CENTER_Z, EYE_Y, theta
@@ -171,6 +171,70 @@ def handle_keys():
     #     CENTER_X += 0.1 * math.sin(math.radians(theta))
     #     CENTER_Z += 0.1 * math.cos(math.radians(theta))
     #     lookat()
+
+
+'''Igual aqui se inicia todo, se configura a los agentes y el entorno
+   no se que tan necesario es pero aja'''
+class Model(ap.Model):
+
+    def setup(self):
+        #Configurar agentes y entorno
+        pass
+    def setp(self):
+        #Logica y cada paso 
+        pass
+
+'''Aqui tendriamos que poner toda la logica del agente junto con su comportamiento
+   igual tenemos que actualizar los valores de cada agente para que se pueda
+   mostrar en el motor grafico'''
+class CarritoAgent(ap.Agent):
+
+    def setup(self):
+        self.liftting = 0 # Empty = 0, With box = 1
+        self.targetFound = 0 # No = 0, Yes = 1
+
+    def step(self):
+        #Poner el next y action
+        pass
+
+    def update(self):
+        pass
+
+    def end(self):
+        pass
+
+    def see(self):
+        #Logica para buscar caja cercana
+        pass
+
+    def next(self):
+        #Ir cambiando los estados de liffting o targetFound
+        pass
+
+    def action(self):
+        #Poner aqui animacion del carrito y movimiento
+        pass
+
+    def move(self):
+        #Definir el movimiento del carrito, incluido cuando encuentra una caja
+        pass
+
+
+'''Aqui podriamos definir el area de lo que pueda ver el agente aunque
+   no es totalmente necesario''' 
+class Environment(ap.Area):
+    def __init__(self, Model):
+        #Configurar propiedades del area
+        pass
+
+    def setup(self):
+        pass
+        #Configurar inicializacion del area
+
+    def update(self):
+        pass
+        #Logica de actualizacion
+
 
 done = False
 Init()
