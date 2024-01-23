@@ -41,7 +41,8 @@ class Carrito:
                                 [3.05, 0.7, 1.0], [1.05, 0.7, 1.0], [1.05, 0.7,-1.0], [3.05, 0.7,-1.0]])
 
         self.scale = 1
-        self.ymin = 0
+        self.ymin = 0.0
+        self.ymax = 4.5
         self.radius = math.sqrt(self.scale**2 + self.scale**2) *2 
         self.DimBoard = dim
         #Se inicializa una posicion aleatoria en el tablero
@@ -461,6 +462,25 @@ class Carrito:
         glColor3f(1.0, 1.0, 1.0)
         self.drawFaces()
         glPopMatrix()
+    
+    # detiene el carrito para que la plataforma suba la caja
+    def stop(self):
+        self.Direction[0] = 0.0
+        self.Direction[2] = 0.0
+
+    # resetea al estado 0 despues de haber despositado la caja en el almacen
+    def reset(self):
+        self.dCol = 0
+        self.ymin = 0.0
+
+    # cambia al estado "elevado"
+    def elevated(self):
+        self.dCol = 2
+
+    # incrementa en 0.1 la altura de la plataforma
+    def elevate(self):
+        self.platform[:,1] += 0.1
+        self.ymin += 0.1
         
     def detCol(self, new_x, new_z):
         for cubo in self.cubos:

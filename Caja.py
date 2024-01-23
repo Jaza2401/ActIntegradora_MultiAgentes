@@ -95,6 +95,18 @@ class Caja:
         glColor3f(0.5, 0.3, 0.1); 
         self.drawFaces()
         glPopMatrix()
+
+    # resetea al estado 0 cuando la caja ha sido depositada en el almacen
+    def reset(self):
+        self.dCol = 0
+
+    # cambia al estado "elevado"
+    def elevated(self):
+        self.dCol = 2
+
+    # incrementa en 0.1 la altura de la caja
+    def elevate(self):
+        self.Position[1] += 0.1
         
     def detCol(self, new_x, new_z, radio):
         # Calcula la distancia entre el carrito y la caja
@@ -104,4 +116,4 @@ class Caja:
 
         # Verifica si hay colisión comparando con el radio del carrito
         if distance < (self.radius + radio):
-            print("colision")
+            self.dCol = 1
