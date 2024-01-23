@@ -66,6 +66,8 @@ class Carrito:
         self.dCol = 0
         #Estado
         self.estado = 0
+        #Agente
+        self.agente = None
 
     def update(self):
         new_x = self.Position[0] + self.Direction[0]

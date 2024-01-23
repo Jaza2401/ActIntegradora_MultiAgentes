@@ -133,7 +133,9 @@ def display():
     #Se dibuja carritos
     for obj in carritos:
         obj.draw()
-        obj.update()
+        agent = CarritoAgent(obj)
+        agent.step()
+        #obj.update() 
 
     for carrito in carritos:
         for caja in cajas:
@@ -161,37 +163,77 @@ def handle_keys():
    mostrar en el motor grafico'''
 class CarritoAgent(ap.Agent):
 
-    def __init__(self, position):
-        self.position = position
+    def __init__(self, carrito):
+        self.carrito = carrito
+        self.dCol = 0
 
-    def step(self, cajas):
-        #Poner el next y action
+    def step(self):
+        # Poner el next y action
         p = self.see(cajas)
         self.next(p)
         self.action()
-        pass
-
-    def update(self):
-        pass
 
     def see(self, c):
-        #Logica para buscar caja cercana
-        #Deteccion de colisiones
-        pass
+        # Logica para buscar caja cercana
+        # Deteccion de colisiones
+        return c
 
-    def next(self):
-        #Si se detecto colision cambiar variable o sino que siga igual
-        pass
+    def next(self, p):
+        # Si se detecto colision cambiar variable o sino que siga igual
+        new_x = self.carrito.Position[0] + self.carrito.Direction[0]
+        new_z = self.carrito.Position[2] + self.carrito.Direction[2]
+
+        for caja in p:
+            r1 = self.carrito.radius
+            r2 = caja.radius
+            cx = (caja.Position[0] - new_x)**2
+            cz = (caja.Position[2] - new_z)**2
+            de = math.sqrt(cx + cz)
+            if de - (r1 + r2) < 0.0:
+                self.dCol = 1
 
     def action(self):
-        #Depende si se detecto colision, si no hubo, que siga igual 
-        #Aqui va move()
-        #Aqui se elimina las cajas del suelo 
-        pass
+        # Dependiendo de si se detecto colision, actualizar el estado del agente
+        if self.dCol == 0:
+            # No hay colisión, actualiza la posición
+            new_x = self.carrito.Position[0] + self.carrito.Direction[0]
+            new_z = self.carrito.Position[2] + self.carrito.Direction[2]
+            # detección de que el objeto no se salga del área de navegación
+            if abs(new_x) <= self.carrito.DimBoard:
+                self.carrito.Position[0] = new_x
+            else:
+                self.carrito.Direction[0] *= -1.0
 
-    def move(self):
-        #Definir el movimiento del carrito, incluido cuando encuentra una caja
-        pass
+            if abs(new_z) <= self.carrito.DimBoard:
+                self.carrito.Position[2] = new_z
+            else:
+                self.carrito.Direction[2] *= -1.0
+
+    
+# '''
+# Aquí se declara un modelo muy simple, con el fin de poder instanciar un agente y pasarlo
+# como parametro a la clase de Carrito
+# '''
+# class CarritoCajaModel(ap.Model):
+#     def __init__(self):
+#         for carro in carritos:
+#             carro.agente = ap.Agent(self, ncarritos, CarritoAgent(carro))
+
+#     def step(self):
+#         #Poner el next y action
+#         for carro in carritos:
+#             carro.agente.step()
+#         carritosParados = [carro for carro in carritos if carro.agente.dCol == 1]
+#         if len(carritosParados) == len(carritos):
+#             pygame.display.quit()
+#             pygame.quit()
+#             self.stop()
+            
+#     def update(self):
+#         pass
+
+#     def end(self):
+#         pass
 
 done = False
 Init()
