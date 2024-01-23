@@ -64,7 +64,7 @@ class Carrito:
         self.Direction[2] *= vel
         #Colision con otros carritos
         self.cubos = []
-        self.dCol = 0
+        self.estado = 0
         #Estado
         self.estado = 0
 
@@ -74,7 +74,7 @@ class Carrito:
 
         self.detCol(new_x, new_z)
 
-        if self.dCol == 0:
+        if self.estado == 0:
             # No hay colisión, actualiza la posición
             self.Position[0] = new_x
             self.Position[2] = new_z
@@ -95,7 +95,7 @@ class Carrito:
             self.Direction[0] *= -1.0
             self.Direction[2] *= -1.0
             print("colision con carro")
-        self.dCol = 0
+        self.estado = 0
         
     def drawCircle(self, radius, num_segments):
         glBegin(GL_POLYGON)
@@ -470,12 +470,12 @@ class Carrito:
 
     # resetea al estado 0 despues de haber despositado la caja en el almacen
     def reset(self):
-        self.dCol = 0
+        self.estado = 0
         self.ymin = 0.0
 
     # cambia al estado "elevado"
     def elevated(self):
-        self.dCol = 2
+        self.estado = 2
 
     # incrementa en 0.1 la altura de la plataforma
     def elevate(self):
@@ -491,4 +491,4 @@ class Carrito:
                 cz = (cubo.Position[2] - new_z)**2
                 de = math.sqrt(cx + cz)
                 if de - (r1 + r2) < 0.0:
-                    self.dCol = 1
+                    self.estado = 1
