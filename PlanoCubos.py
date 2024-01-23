@@ -55,6 +55,7 @@ pygame.init()
 
 #carrito = carrito(DimBoard, 1.0)
 carritos = []
+agCarritos = []
 ncarritos = 5
 
 #cajas = Caja(DimBoard, 1.0)
@@ -114,6 +115,10 @@ def Init():
         
     for i in range(ncajas):
         cajas.append(Caja(DimBoard, 1))
+
+    for carrito in carritos:
+            for caja in cajas:
+                caja.detCol(carrito.Position[0], carrito.Position[2], carrito.radius)
 
 def display():  
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -242,6 +247,9 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
+
+    for obj in agCarritos:
+        obj.step()
 
     display()
 
