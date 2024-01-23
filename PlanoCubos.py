@@ -60,7 +60,7 @@ ncarritos = 5
 
 #cajas = Caja(DimBoard, 1.0)
 cajas = []
-ncajas = 50
+ncajas = 10
 
 def Axis():
     glShadeModel(GL_FLAT)
@@ -213,6 +213,7 @@ class CarritoAgent(ap.Agent):
                 self.carrito.Position[2] = new_z
             else:
                 self.carrito.Direction[2] *= -1.0
+        self.dCol = 0
 
     
 # '''
@@ -248,8 +249,8 @@ while not done:
         if event.type == pygame.QUIT:
             done = True
 
-    for obj in agCarritos:
-        obj.step()
+    # for obj in agCarritos:
+    #     obj.step()
 
     display()
 
