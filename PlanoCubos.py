@@ -55,6 +55,7 @@ pygame.init()
 
 #carrito = carrito(DimBoard, 1.0)
 carritos = []
+agCarritos = []
 ncarritos = 5
 
 #cajas = Caja(DimBoard, 1.0)
@@ -115,6 +116,10 @@ def Init():
     for i in range(ncajas):
         cajas.append(Caja(DimBoard, 1))
 
+    for carrito in carritos:
+            for caja in cajas:
+                caja.detCol(carrito.Position[0], carrito.Position[2], carrito.radius)
+
 def display():  
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     Axis()
@@ -160,13 +165,13 @@ def handle_keys():
    igual tenemos que actualizar los valores de cada agente para que se pueda
    mostrar en el motor grafico'''
 class CarritoAgent(ap.Agent):
-
-    def __init__(self, position):
+    def __init__(self, position, loaded):
         self.position = position
+        self.loaded = loaded #0 = empty, 1 = full
 
-    def step(self, cajas):
+    def step(self):
         #Poner el next y action
-        p = self.see(cajas)
+        p = self.see() #cajas 
         self.next(p)
         self.action()
         pass
@@ -174,7 +179,7 @@ class CarritoAgent(ap.Agent):
     def update(self):
         pass
 
-    def see(self, c):
+    def see(self):
         #Logica para buscar caja cercana
         #Deteccion de colisiones
         pass
@@ -200,6 +205,9 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
+
+    for obj in agCarritos:
+        obj.step()
 
     display()
 
