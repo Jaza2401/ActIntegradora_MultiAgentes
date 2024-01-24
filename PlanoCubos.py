@@ -118,9 +118,6 @@ def Init():
     for i in range(ncajas):
         cajas.append(Caja(DimBoard, 1))
 
-    # for carrito in carritos:
-    #         for caja in cajas:
-    #             caja.detCol(carrito.Position[0], carrito.Position[2], carrito.radius)
 
 def display():  
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -149,7 +146,8 @@ def display():
         carrito_wrapper.carrito.draw()
         carrito_wrapper.agente.step()
 
-    for carrito in carritos:
+    for carrito_wrapper in carritos:
+            carrito = carrito_wrapper.carrito
             for caja in cajas:
                 caja.detCol(carrito.Position[0], carrito.Position[2], carrito.radius)
                 if(caja.estado == 1):

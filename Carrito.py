@@ -68,34 +68,34 @@ class Carrito:
         #Estado
         self.estado = 0
 
-    def update(self):
-        new_x = self.Position[0] + self.Direction[0]
-        new_z = self.Position[2] + self.Direction[2]
+    # def update(self):
+    #     new_x = self.Position[0] + self.Direction[0]
+    #     new_z = self.Position[2] + self.Direction[2]
 
-        self.detCol(new_x, new_z)
+    #     self.detCol(new_x, new_z)
 
-        if self.dCol == 0:
-            # No hay colisión, actualiza la posición
-            self.Position[0] = new_x
-            self.Position[2] = new_z
-            #detecc de que el objeto no se salga del area de navegacion
-            if(abs(new_x) <= self.DimBoard):
-                self.Position[0] = new_x
-            else:
-                self.Direction[0] *= -1.0
-                #self.Position[0] += self.Direction[0]
+    #     if self.dCol == 0:
+    #         # No hay colisión, actualiza la posición
+    #         self.Position[0] = new_x
+    #         self.Position[2] = new_z
+    #         #detecc de que el objeto no se salga del area de navegacion
+    #         if(abs(new_x) <= self.DimBoard):
+    #             self.Position[0] = new_x
+    #         else:
+    #             self.Direction[0] *= -1.0
+    #             #self.Position[0] += self.Direction[0]
             
-            if(abs(new_z) <= self.DimBoard):
-                self.Position[2] = new_z
-            else:
-                self.Direction[2] *= -1.0
-                #self.Position[2] += self.Direction[2] 
-        else:
-            # rebote
-            self.Direction[0] *= -1.0
-            self.Direction[2] *= -1.0
-            print("colision con carro")
-        self.dCol = 0
+    #         if(abs(new_z) <= self.DimBoard):
+    #             self.Position[2] = new_z
+    #         else:
+    #             self.Direction[2] *= -1.0
+    #             #self.Position[2] += self.Direction[2] 
+    #     else:
+    #         # rebote
+    #         self.Direction[0] *= -1.0
+    #         self.Direction[2] *= -1.0
+    #         print("colision con carro")
+    #     self.dCol = 0
         
     def drawCircle(self, radius, num_segments):
         glBegin(GL_POLYGON)
@@ -463,13 +463,13 @@ class Carrito:
         self.drawFaces()
         glPopMatrix()
         
-    def detCol(self, new_x, new_z):
-        for cubo in self.cubos:
-            if cubo is not self:
-                r1 = self.radius
-                r2 = cubo.radius
-                cx = (cubo.Position[0] - new_x)**2
-                cz = (cubo.Position[2] - new_z)**2
-                de = math.sqrt(cx + cz)
-                if de - (r1 + r2) < 0.0:
-                    self.dCol = 1
+    # def detCol(self, new_x, new_z):
+    #     for cubo in self.cubos:
+    #         if cubo is not self:
+    #             r1 = self.radius
+    #             r2 = cubo.radius
+    #             cx = (cubo.Position[0] - new_x)**2
+    #             cz = (cubo.Position[2] - new_z)**2
+    #             de = math.sqrt(cx + cz)
+    #             if de - (r1 + r2) < 0.0:
+    #                 self.dCol = 1
