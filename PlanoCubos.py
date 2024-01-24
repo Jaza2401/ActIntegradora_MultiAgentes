@@ -56,7 +56,7 @@ pygame.init()
 #carrito = carrito(DimBoard, 1.0)
 carritos = []
 agCarritos = []
-ncarritos = 1
+ncarritos = 5
 
 #cajas = Caja(DimBoard, 1.0)
 cajas = []
@@ -145,19 +145,6 @@ def display():
     for carrito_wrapper in carritos:
         carrito_wrapper.carrito.draw()
         carrito_wrapper.agente.step()
-
-    for carrito_wrapper in carritos:
-            carrito = carrito_wrapper.carrito
-            for caja in cajas:
-                caja.detCol(carrito.Position[0], carrito.Position[2], carrito.radius)
-                if(caja.estado == 1):
-                    while(carrito.ymin <= carrito.ymax):
-                        carrito.stop()
-                        carrito.elevate()
-                        caja.elevate()
-                    caja.elevated()
-                    carrito.elevated()
-                    cajas.remove(caja)
     
 def handle_keys():
     global CENTER_X, CENTER_Y, CENTER_Z, EYE_Y, theta
@@ -188,7 +175,7 @@ class CarritoAgent(ap.Agent):
     def __init__(self, carrito):
         self.carrito = carrito
         self.dCol = 0
-        self.stop = 0
+        self.cajaActual = None
 
     def step(self):
         # Poner el next y action
@@ -202,11 +189,10 @@ class CarritoAgent(ap.Agent):
         return c
 
     def next(self, p):
-            # Si se detecto colision cambiar variable o sino que siga igual
-        new_x = self.carrito.Position[0] + self.carrito.Direction[0]
-        new_z = self.carrito.Position[2] + self.carrito.Direction[2]
-
         if self.dCol == 0:
+            # Si se detecto colision cambiar variable o sino que siga igual
+            new_x = self.carrito.Position[0] + self.carrito.Direction[0]
+            new_z = self.carrito.Position[2] + self.carrito.Direction[2]
             print("buscando colision")
             for caja in p:
                 r1 = self.carrito.radius
@@ -215,6 +201,7 @@ class CarritoAgent(ap.Agent):
                 cz = (caja.Position[2] - new_z)**2
                 de = math.sqrt(cx + cz)
                 if de - (r1 + r2) < 0.0:
+                    self.cajaActual = caja
                     p.remove(caja)
                     self.dCol = 1
         else:
@@ -222,40 +209,48 @@ class CarritoAgent(ap.Agent):
 
     def action(self):
         # Dependiendo de si se detecto colision, actualizar el estado del agente
-        if self.dCol == 0:
-            # No hay colisión, actualiza la posición
-            new_x = self.carrito.Position[0] + self.carrito.Direction[0]
-            new_z = self.carrito.Position[2] + self.carrito.Direction[2]
-            # detección de que el objeto no se salga del área de navegación
-            if abs(new_x) <= self.carrito.DimBoard:
-                self.carrito.Position[0] = new_x
-            else:
-                self.carrito.Direction[0] *= -1.0
+        # No hay colisión, actualiza la posición
+        new_x = self.carrito.Position[0] + self.carrito.Direction[0]
+        new_z = self.carrito.Position[2] + self.carrito.Direction[2]
 
-            if abs(new_z) <= self.carrito.DimBoard:
-                self.carrito.Position[2] = new_z
-            else:
-                self.carrito.Direction[2] *= -1.0
+        # detección de que el objeto no se salga del área de navegación
+        if abs(new_x) <= self.carrito.DimBoard:
+            self.carrito.Position[0] = new_x
         else:
-            #self.dCol = 0
-            target_x = self.carrito.DimBoard
-            target_z = 0.0
-            # Calcular la nueva dirección hacia el punto específico
-            delta_x = target_x - self.carrito.Position[0]
-            delta_z = target_z - self.carrito.Position[2]
-            distance = math.sqrt(delta_x**2 + delta_z**2)
-            
-            if distance > 0.0:
-                # Normalizar la dirección
-                new_direction_x = delta_x / distance
-                new_direction_z = delta_z / distance
-                # Establecer la nueva dirección
-                self.carrito.Direction = [new_direction_x, 0.0, new_direction_z]
-            else:
-                # El carro ya está en el punto específico, no hay necesidad de cambiar la dirección
-                self.dCol = 0
+            self.carrito.Direction[0] *= -1.0
 
-        self.dCol = 0
+        if abs(new_z) <= self.carrito.DimBoard:
+            self.carrito.Position[2] = new_z
+        else:
+            self.carrito.Direction[2] *= -1.0
+
+        if self.dCol == 1:
+            if (self.carrito.ymin <= self.carrito.ymax):
+                self.carrito.stop()
+                self.carrito.elevate()
+                self.cajaActual.elevate()
+            else:
+                print("elevado")
+                target_x = self.carrito.DimBoard
+                target_z = 0.0
+                # Calcular la nueva dirección hacia el punto específico
+                delta_x = target_x - self.carrito.Position[0]
+                delta_z = target_z - self.carrito.Position[2]
+                distance = math.sqrt(delta_x**2 + delta_z**2)
+                
+                if distance > 0.9:
+                    # Normalizar la dirección
+                    new_direction_x = delta_x / distance
+                    new_direction_z = delta_z / distance
+                    # Establecer la nueva dirección
+                    self.carrito.Direction = [new_direction_x, 0.0, new_direction_z]
+                else:
+                    print("Entrego")
+                    # El carro ya está en el punto específico, no hay necesidad de cambiar la dirección
+                    self.dCol = 0
+                    self.carrito.reset()
+
+        # self.dCol = 0
 
 done = False
 Init()
