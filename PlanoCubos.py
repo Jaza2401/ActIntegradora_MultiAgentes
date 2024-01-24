@@ -136,15 +136,16 @@ def display():
         obj.update()
 
     for carrito in carritos:
-        for caja in cajas:
-            caja.detCol(carrito.Position[0], carrito.Position[2], carrito.radius)
-            if(caja.estado == 1):
-                while(carrito.ymin <= carrito.ymax):
-                    carrito.stop()
-                    carrito.elevate()
-                    caja.elevate()
-                caja.elevated()
-                carrito.elevated()
+            for caja in cajas:
+                caja.detCol(carrito.Position[0], carrito.Position[2], carrito.radius)
+                if(caja.estado == 1):
+                    while(carrito.ymin <= carrito.ymax):
+                        carrito.stop()
+                        carrito.elevate()
+                        caja.elevate()
+                    caja.elevated()
+                    carrito.elevated()
+                    cajas.remove(caja)
     
 def handle_keys():
     global CENTER_X, CENTER_Y, CENTER_Z, EYE_Y, theta

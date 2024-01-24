@@ -94,7 +94,6 @@ class Carrito:
             # rebote
             self.Direction[0] *= -1.0
             self.Direction[2] *= -1.0
-            print("colision con carro")
         self.estado = 0
         
     def drawCircle(self, radius, num_segments):
@@ -467,6 +466,10 @@ class Carrito:
     def stop(self):
         self.Direction[0] = 0.0
         self.Direction[2] = 0.0
+
+    def pushaway (self):
+        self.Direction[0] *= -1.0
+        self.Direction[2] *= -1.0
 
     # resetea al estado 0 despues de haber despositado la caja en el almacen
     def reset(self):
