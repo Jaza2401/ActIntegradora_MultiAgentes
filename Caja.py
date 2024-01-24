@@ -42,7 +42,7 @@ class Caja:
         self.Direction[2] *= vel
         #Colision
         self.cajas = []
-        self.dCol = 0
+        self.estado = 0
         
 
     def update(self):
@@ -98,11 +98,11 @@ class Caja:
 
     # resetea al estado 0 cuando la caja ha sido depositada en el almacen
     def reset(self):
-        self.dCol = 0
+        self.estado = 0
 
     # cambia al estado "elevado"
     def elevated(self):
-        self.dCol = 2
+        self.estado = 2
 
     # incrementa en 0.1 la altura de la caja
     def elevate(self):
@@ -116,4 +116,4 @@ class Caja:
 
         # Verifica si hay colisión comparando con el radio del carrito
         if distance < (self.radius + radio):
-            self.dCol = 1
+            self.estado = 1
