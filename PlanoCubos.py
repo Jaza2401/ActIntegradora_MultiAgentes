@@ -56,11 +56,12 @@ pygame.init()
 #carrito = carrito(DimBoard, 1.0)
 carritos = []
 agCarritos = []
-ncarritos = 5
+ncarritos = 1
 
 #cajas = Caja(DimBoard, 1.0)
 cajas = []
-ncajas = 10
+ncajas = 40
+
 
 def Axis():
     glShadeModel(GL_FLAT)
@@ -111,14 +112,15 @@ def Init():
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL)
     
     for i in range(ncarritos):
-        carritos.append(Carrito(DimBoard, 1))
+        carrito = Carrito(DimBoard, 1)
+        carritos.append(CarritoWrapper(carrito))
         
     for i in range(ncajas):
         cajas.append(Caja(DimBoard, 1))
 
-    for carrito in carritos:
-            for caja in cajas:
-                caja.detCol(carrito.Position[0], carrito.Position[2], carrito.radius)
+    # for carrito in carritos:
+    #         for caja in cajas:
+    #             caja.detCol(carrito.Position[0], carrito.Position[2], carrito.radius)
 
 def display():  
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
@@ -131,18 +133,24 @@ def display():
     glVertex3d(DimBoard, 0, DimBoard)
     glVertex3d(DimBoard, 0, -DimBoard)
     glEnd()
+
+    glColor3f(1.0, 0.0, 0.0)
+    glBegin(GL_QUADS)
+    glVertex3d(DimBoard * 1.5, 0, -DimBoard * 0.5)
+    glVertex3d(DimBoard * 1.5, 0, DimBoard * 0.5)
+    glVertex3d(DimBoard, 0, DimBoard * 0.5)
+    glVertex3d(DimBoard, 0, -DimBoard * 0.5)
+    glEnd()
     
     for caja in cajas:
         caja.draw()
 
-    #Se dibuja carritos
-    for obj in carritos:
-        obj.draw()
-        agent = CarritoAgent(obj)
-        agent.step()
-        #obj.update() 
+    for carrito_wrapper in carritos:
+        carrito_wrapper.carrito.draw()
+        carrito_wrapper.agente.step()
 
-    for carrito in carritos:
+    for carrito_wrapper in carritos:
+        carrito = carrito_wrapper.carrito  # Access the Carrito instance within the wrapper
         for caja in cajas:
             caja.detCol(carrito.Position[0], carrito.Position[2], carrito.radius)
     
@@ -163,14 +171,19 @@ def handle_keys():
             theta += 1.0
         lookat()
 
+class CarritoWrapper:
+    def __init__(self, carrito):
+        self.carrito = carrito
+        self.agente = CarritoAgent(carrito)
+
 '''Aqui tendriamos que poner toda la logica del agente junto con su comportamiento
    igual tenemos que actualizar los valores de cada agente para que se pueda
    mostrar en el motor grafico'''
 class CarritoAgent(ap.Agent):
-
     def __init__(self, carrito):
         self.carrito = carrito
         self.dCol = 0
+        self.stop = 0
 
     def step(self):
         # Poner el next y action
@@ -184,18 +197,23 @@ class CarritoAgent(ap.Agent):
         return c
 
     def next(self, p):
-        # Si se detecto colision cambiar variable o sino que siga igual
+            # Si se detecto colision cambiar variable o sino que siga igual
         new_x = self.carrito.Position[0] + self.carrito.Direction[0]
         new_z = self.carrito.Position[2] + self.carrito.Direction[2]
 
-        for caja in p:
-            r1 = self.carrito.radius
-            r2 = caja.radius
-            cx = (caja.Position[0] - new_x)**2
-            cz = (caja.Position[2] - new_z)**2
-            de = math.sqrt(cx + cz)
-            if de - (r1 + r2) < 0.0:
-                self.dCol = 1
+        if self.dCol == 0:
+            print("buscando colision")
+            for caja in p:
+                r1 = self.carrito.radius
+                r2 = caja.radius
+                cx = (caja.Position[0] - new_x)**2
+                cz = (caja.Position[2] - new_z)**2
+                de = math.sqrt(cx + cz)
+                if de - (r1 + r2) < 0.0:
+                    p.remove(caja)
+                    self.dCol = 1
+        else:
+            print("colision encontrada")
 
     def action(self):
         # Dependiendo de si se detecto colision, actualizar el estado del agente
@@ -213,33 +231,26 @@ class CarritoAgent(ap.Agent):
                 self.carrito.Position[2] = new_z
             else:
                 self.carrito.Direction[2] *= -1.0
-        self.dCol = 0
-
-    
-# '''
-# Aquí se declara un modelo muy simple, con el fin de poder instanciar un agente y pasarlo
-# como parametro a la clase de Carrito
-# '''
-# class CarritoCajaModel(ap.Model):
-#     def __init__(self):
-#         for carro in carritos:
-#             carro.agente = ap.Agent(self, ncarritos, CarritoAgent(carro))
-
-#     def step(self):
-#         #Poner el next y action
-#         for carro in carritos:
-#             carro.agente.step()
-#         carritosParados = [carro for carro in carritos if carro.agente.dCol == 1]
-#         if len(carritosParados) == len(carritos):
-#             pygame.display.quit()
-#             pygame.quit()
-#             self.stop()
+        else:
+            #self.dCol = 0
+            target_x = self.carrito.DimBoard
+            target_z = 0.0
+            # Calcular la nueva dirección hacia el punto específico
+            delta_x = target_x - self.carrito.Position[0]
+            delta_z = target_z - self.carrito.Position[2]
+            distance = math.sqrt(delta_x**2 + delta_z**2)
             
-#     def update(self):
-#         pass
+            if distance > 0.0:
+                # Normalizar la dirección
+                new_direction_x = delta_x / distance
+                new_direction_z = delta_z / distance
+                # Establecer la nueva dirección
+                self.carrito.Direction = [new_direction_x, 0.0, new_direction_z]
+            else:
+                # El carro ya está en el punto específico, no hay necesidad de cambiar la dirección
+                self.dCol = 0
 
-#     def end(self):
-#         pass
+        self.dCol = 0
 
 done = False
 Init()
@@ -248,9 +259,6 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
-
-    # for obj in agCarritos:
-    #     obj.step()
 
     display()
 

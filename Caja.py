@@ -44,12 +44,6 @@ class Caja:
         self.cajas = []
         self.dCol = 0
         
-
-    def update(self):
-        pass
-        
-        
-
     def drawFaces(self):
         glBegin(GL_QUADS)
         glVertex3fv(self.points[0])
