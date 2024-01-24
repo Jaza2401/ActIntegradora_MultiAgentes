@@ -17,28 +17,28 @@ from OpenGL.GLUT import *
 class Carrito:
     def __init__(self, dim, vel):
         #vertices del cubo
-        self.base = np.array([[-1.0, 0.5, 1.0], [1.0, 0.5, 1.0], [1.0, 0.5,-1.0], [-1.0, 0.5,-1.0],
-                                [-1.0, 1, 1.0], [1.0, 1, 1.0], [1.0, 1,-1.0], [-1.0, 1,-1.0]])
+        self.base = np.array([[-1.0, 0.0, 1.0], [1.0, 0.0, 1.0], [1.0, 0.0,-1.0], [-1.0, 0.0,-1.0],
+                                [-1.0, 0.5, 1.0], [1.0, 0.5, 1.0], [1.0, 0.5,-1.0], [-1.0, 0.5,-1.0]])
 
-        self.pillar1 = np.array([[-0.8, 1, 0.8], [-0.8, 1, 1.0], [-1.0, 1, 1.0], [-1.0, 1, 0.8],
-                               [-0.8, 3.5, 0.8], [-0.8, 3.5, 1.0], [-1.0, 3.5, 1.0], [-1.0, 3.5, 0.8]])
+        self.pillar1 = np.array([[-0.8, 0.5, 0.8], [-0.8, 0.5, 1.0], [-1.0, 0.5, 1.0], [-1.0, 0.5, 0.8],
+                               [-0.8, 3.0, 0.8], [-0.8, 3.0, 1.0], [-1.0, 3.0, 1.0], [-1.0, 3.0, 0.8]])
         
-        self.pillar2 = np.array([[1.0, 1, 0.8], [1.0, 1, 1.0], [0.8, 1, 1.0], [0.8, 1, 0.8],
-                               [1.0, 3.5, 0.8], [1.0, 3.5, 1.0], [0.8, 3.5, 1.0], [0.8, 3.5, 0.8]])
+        self.pillar2 = np.array([[1.0, 0.5, 0.8], [1.0, 0.5, 1.0], [0.8, 0.5, 1.0], [0.8, 0.5, 0.8],
+                               [1.0, 3.0, 0.8], [1.0, 3.0, 1.0], [0.8, 3.0, 1.0], [0.8, 3.0, 0.8]])
         
-        self.pillar3 = np.array([[1.0, 1, -1.0], [1.0, 1, -0.8], [0.8, 1, -0.8], [0.8, 1, -1.0],
-                               [1.0, 3.5, -1.0], [1.0, 3.5, -0.8], [0.8, 3.5, -0.8], [0.8, 3.5, -1.0]])
+        self.pillar3 = np.array([[1.0, 0.5, -1.0], [1.0, 0.5, -0.8], [0.8, 0.5, -0.8], [0.8, 0.5, -1.0],
+                               [1.0, 3.0, -1.0], [1.0, 3.0, -0.8], [0.8, 3.0, -0.8], [0.8, 3.0, -1.0]])
         
-        self.pillar4 = np.array([[-0.8, 1, -1.0], [-0.8, 1, -0.8], [-1.0, 1, -0.8], [-1.0, 1, -1.0],
-                               [-0.8, 3.5, -1.0], [-0.8, 3.5, -0.8], [-1.0, 3.5, -0.8], [-1.0, 3.5, -1.0]])
+        self.pillar4 = np.array([[-0.8, 0.5, -1.0], [-0.8, 0.5, -0.8], [-1.0, 0.5, -0.8], [-1.0, 0.5, -1.0],
+                               [-0.8, 3.0, -1.0], [-0.8, 3.0, -0.8], [-1.0, 3.0, -0.8], [-1.0, 3.0, -1.0]])
         
-        self.roof = np.array([[-1.0, 3.5, 1.0], [1.0, 3.5, 1.0], [1.0, 3.5,-1.0], [-1.0, 3.5,-1.0],
-                                [-1.0, 3.8, 1.0], [1.0, 3.8, 1.0], [1.0, 3.8,-1.0], [-1.0, 3.8,-1.0]])
+        self.roof = np.array([[-1.0, 3.0, 1.0], [1.0, 3.0, 1.0], [1.0, 3.0,-1.0], [-1.0, 3.0,-1.0],
+                                [-1.0, 3.3, 1.0], [1.0, 3.3, 1.0], [1.0, 3.3,-1.0], [-1.0, 3.3,-1.0]])
         
-        self.front = np.array([[1.05, 0.5, 1.5], [1.05, 0.5, -1.5], [1.05, 5, -1.5], [1.05, 5, 1.5]])
+        self.front = np.array([[1.05, 0.0, 1.5], [1.05, 0.0, -1.5], [1.05, 4.5, -1.5], [1.05, 4.5, 1.5]])
 
-        self.platform = np.array([[3.05, 0.5, 1.0], [1.05, 0.5, 1.0], [1.05, 0.5,-1.0], [3.05, 0.5,-1.0],
-                                [3.05, 0.7, 1.0], [1.05, 0.7, 1.0], [1.05, 0.7,-1.0], [3.05, 0.7,-1.0]])
+        self.platform = np.array([[3.05, 0.0, 1.0], [1.05, 0.0, 1.0], [1.05, 0.0,-1.0], [3.05, 0.0,-1.0],
+                                [3.05, 0.2, 1.0], [1.05, 0.2, 1.0], [1.05, 0.2,-1.0], [3.05, 0.2,-1.0]])
 
         self.scale = 1
         self.ymin = 0.0
@@ -64,36 +64,8 @@ class Carrito:
         self.Direction[2] *= vel
         #Colision con otros carritos
         self.cubos = []
-        self.estado = 0
+        self.dCol = 0
         #Estado
-        self.estado = 0
-
-    def update(self):
-        new_x = self.Position[0] + self.Direction[0]
-        new_z = self.Position[2] + self.Direction[2]
-
-        self.detCol(new_x, new_z)
-
-        if self.estado == 0:
-            # No hay colisión, actualiza la posición
-            self.Position[0] = new_x
-            self.Position[2] = new_z
-            #detecc de que el objeto no se salga del area de navegacion
-            if(abs(new_x) <= self.DimBoard):
-                self.Position[0] = new_x
-            else:
-                self.Direction[0] *= -1.0
-                #self.Position[0] += self.Direction[0]
-            
-            if(abs(new_z) <= self.DimBoard):
-                self.Position[2] = new_z
-            else:
-                self.Direction[2] *= -1.0
-                #self.Position[2] += self.Direction[2] 
-        else:
-            # rebote
-            self.Direction[0] *= -1.0
-            self.Direction[2] *= -1.0
         self.estado = 0
         
     def drawCircle(self, radius, num_segments):
@@ -452,7 +424,6 @@ class Carrito:
         glColor3f(182.0, 149.0, 192.0)
         self.drawCircle(0.2, 50)
         glPopMatrix()
-        
     
     def draw(self):
         glPushMatrix()
@@ -461,8 +432,7 @@ class Carrito:
         glColor3f(1.0, 1.0, 1.0)
         self.drawFaces()
         glPopMatrix()
-    
-    # detiene el carrito para que la plataforma suba la caja
+
     def stop(self):
         self.Direction[0] = 0.0
         self.Direction[2] = 0.0
@@ -475,6 +445,7 @@ class Carrito:
     def reset(self):
         self.estado = 0
         self.ymin = 0.0
+        self.platform[:,1] = 0.0
 
     # cambia al estado "elevado"
     def elevated(self):
@@ -485,13 +456,3 @@ class Carrito:
         self.platform[:,1] += 0.1
         self.ymin += 0.1
         
-    def detCol(self, new_x, new_z):
-        for cubo in self.cubos:
-            if cubo is not self:
-                r1 = self.radius
-                r2 = cubo.radius
-                cx = (cubo.Position[0] - new_x)**2
-                cz = (cubo.Position[2] - new_z)**2
-                de = math.sqrt(cx + cz)
-                if de - (r1 + r2) < 0.0:
-                    self.estado = 1

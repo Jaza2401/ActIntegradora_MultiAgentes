@@ -17,8 +17,8 @@ class Caja:
     
     def __init__(self, dim, vel):
         #vertices del cubo
-        self.points = np.array([[-1.0,-1.0, 1.0], [1.0,-1.0, 1.0], [1.0,-1.0,-1.0], [-1.0,-1.0,-1.0],
-                                [-1.0, 1.0, 1.0], [1.0, 1.0, 1.0], [1.0, 1.0,-1.0], [-1.0, 1.0,-1.0]])
+        self.points = np.array([[-1.0, 0.0, 1.0], [1.0, 0.0, 1.0], [1.0, 0.0,-1.0], [-1.0, 0.0,-1.0],
+                                [-1.0, 2.0, 1.0], [1.0, 2.0, 1.0], [1.0, 2.0,-1.0], [-1.0, 2.0,-1.0]])
         
         self.scale = 1
         self.radius = math.sqrt(self.scale**2 + self.scale**2)
@@ -44,12 +44,6 @@ class Caja:
         self.cajas = []
         self.estado = 0
         
-
-    def update(self):
-        pass
-        
-        
-
     def drawFaces(self):
         glBegin(GL_QUADS)
         glVertex3fv(self.points[0])
