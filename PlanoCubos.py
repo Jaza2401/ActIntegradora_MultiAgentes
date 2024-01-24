@@ -149,10 +149,17 @@ def display():
         carrito_wrapper.carrito.draw()
         carrito_wrapper.agente.step()
 
-    for carrito_wrapper in carritos:
-        carrito = carrito_wrapper.carrito  # Access the Carrito instance within the wrapper
-        for caja in cajas:
-            caja.detCol(carrito.Position[0], carrito.Position[2], carrito.radius)
+    for carrito in carritos:
+            for caja in cajas:
+                caja.detCol(carrito.Position[0], carrito.Position[2], carrito.radius)
+                if(caja.estado == 1):
+                    while(carrito.ymin <= carrito.ymax):
+                        carrito.stop()
+                        carrito.elevate()
+                        caja.elevate()
+                    caja.elevated()
+                    carrito.elevated()
+                    cajas.remove(caja)
     
 def handle_keys():
     global CENTER_X, CENTER_Y, CENTER_Z, EYE_Y, theta
