@@ -30,7 +30,7 @@ ZFAR=900.0
 #Variables para definir la posicion del observador
 #gluLookAt(EYE_X,EYE_Y,EYE_Z,CENTER_X,CENTER_Y,CENTER_Z,UP_X,UP_Y,UP_Z)
 EYE_X=5.0
-EYE_Y=15.0
+EYE_Y=20.0
 EYE_Z=5.0
 CENTER_X=0
 CENTER_Y=3
@@ -49,7 +49,7 @@ Z_MAX=500
 DimBoard = 50
 #Variables para el control del observador
 theta = 0.0
-radius = DimBoard + 10
+radius = DimBoard + 20
 
 pygame.init()
 
@@ -60,8 +60,8 @@ ncarritos = 5
 
 #cajas = Caja(DimBoard, 1.0)
 cajas = []
+cajasEliminadas = []
 ncajas = 40
-
 
 def Axis():
     glShadeModel(GL_FLAT)
@@ -120,6 +120,7 @@ def Init():
 
 
 def display():  
+    global cajasEliminadas
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
     Axis()
     #Se dibuja el plano gris
@@ -138,9 +139,14 @@ def display():
     glVertex3d(DimBoard, 0, DimBoard * 0.5)
     glVertex3d(DimBoard, 0, -DimBoard * 0.5)
     glEnd()
-    
+
     for caja in cajas:
         caja.draw()
+    
+    for caja in cajasEliminadas:
+        if caja in cajas:
+            cajas.remove(caja)
+    cajasEliminadas = []
 
     for carrito_wrapper in carritos:
         carrito_wrapper.carrito.draw()
@@ -193,19 +199,16 @@ class CarritoAgent(ap.Agent):
             # Si se detecto colision cambiar variable o sino que siga igual
             new_x = self.carrito.Position[0] + self.carrito.Direction[0]
             new_z = self.carrito.Position[2] + self.carrito.Direction[2]
-            print("buscando colision")
             for caja in p:
                 r1 = self.carrito.radius
                 r2 = caja.radius
                 cx = (caja.Position[0] - new_x)**2
                 cz = (caja.Position[2] - new_z)**2
                 de = math.sqrt(cx + cz)
-                if de - (r1 + r2) < 0.0:
+                if de - (r1 + r2) < 0.0 and caja.estado == 0:
                     self.cajaActual = caja
-                    p.remove(caja)
+                    caja.elevated()
                     self.dCol = 1
-        else:
-            print("colision encontrada")
 
     def action(self):
         # Dependiendo de si se detecto colision, actualizar el estado del agente
@@ -230,27 +233,35 @@ class CarritoAgent(ap.Agent):
                 self.carrito.elevate()
                 self.cajaActual.elevate()
             else:
-                print("elevado")
                 target_x = self.carrito.DimBoard
                 target_z = 0.0
                 # Calcular la nueva dirección hacia el punto específico
                 delta_x = target_x - self.carrito.Position[0]
                 delta_z = target_z - self.carrito.Position[2]
-                distance = math.sqrt(delta_x**2 + delta_z**2)
-                
-                if distance > 0.9:
+                distancia = math.sqrt(delta_x**2 + delta_z**2)
+
+                delta_x_caja = target_x - self.cajaActual.Position[0]
+                delta_z_caja = target_z - self.cajaActual.Position[2]
+                distanciaCaja = math.sqrt(delta_x_caja**2 + delta_z_caja**2)
+
+                if distancia > 2.0:
                     # Normalizar la dirección
-                    new_direction_x = delta_x / distance
-                    new_direction_z = delta_z / distance
+                    new_direction_x = delta_x / distancia
+                    new_direction_z = delta_z / distancia
                     # Establecer la nueva dirección
                     self.carrito.Direction = [new_direction_x, 0.0, new_direction_z]
+
+                    new_direction_x_caja = delta_x_caja / distanciaCaja
+                    new_direction_z_caja = delta_z_caja / distanciaCaja
+                    self.cajaActual.Direction = [new_direction_x_caja, 0.0, new_direction_z_caja]
+                    self.cajaActual.Position[0] += self.cajaActual.Direction[0]
+                    self.cajaActual.Position[2] += self.cajaActual.Direction[2]
+
                 else:
-                    print("Entrego")
                     # El carro ya está en el punto específico, no hay necesidad de cambiar la dirección
                     self.dCol = 0
                     self.carrito.reset()
-
-        # self.dCol = 0
+                    cajasEliminadas.append(self.cajaActual)
 
 done = False
 Init()
