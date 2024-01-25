@@ -262,19 +262,33 @@ class CarritoAgent(ap.Agent):
                 delta_z_caja = target_z - self.cajaActual.Position[2]
                 distanciaCaja = math.sqrt(delta_x_caja**2 + delta_z_caja**2)
 
-                if distancia > 2.0:
+                if distancia > 2.0:  
                     # Normalizar la dirección
                     new_direction_x = delta_x / distancia
                     new_direction_z = delta_z / distancia
                     # Establecer la nueva dirección
                     self.carrito.Direction = [new_direction_x, 0.0, new_direction_z]
 
+                    # Update rotation based on the direction
+                    self.carrito.rotate(self.carrito.Direction)           
+                    self.carrito.rotate([new_direction_x, 0.0, new_direction_z])
+                    
+                    # Move the cart based on the new direction
+                    self.carrito.Position[0] += self.carrito.Direction[0]
+                    self.carrito.Position[2] += self.carrito.Direction[2]
+                    
                     new_direction_x_caja = delta_x_caja / distanciaCaja
                     new_direction_z_caja = delta_z_caja / distanciaCaja
+                    
                     self.cajaActual.Direction = [new_direction_x_caja, 0.0, new_direction_z_caja]
+                    # Update the position of the box based on the new direction
+                    self.cajaActual.Position[0] += self.carrito.Direction[0]
+                    self.cajaActual.Position[2] += self.carrito.Direction[2]
                     self.cajaActual.Position[0] += self.cajaActual.Direction[0]
                     self.cajaActual.Position[2] += self.cajaActual.Direction[2]
-
+                    # Adjust the height of the box to match the height of the cart
+                    self.cajaActual.Position[1] = self.carrito.Position[1] + self.carrito.ymin
+                
                 else:
                     cajasLevantadas += 1
                     if cajasLevantadas == ncajas:
@@ -286,7 +300,25 @@ class CarritoAgent(ap.Agent):
                     # El carro ya está en el punto específico, no hay necesidad de cambiar la dirección
                     self.dCol = 0
                     self.carrito.reset()
-                    cajasEliminadas.append(self.cajaActual)
+                    #cajasEliminadas.append(self.cajaActual)
+                    
+                # Añade una comprobación para verificar si la caja llegó al destino
+                if distancia <= 2.0:
+                    # La caja ha llegado al destino, acomódala en el almacén
+                    self.cajaActual.Position = [self.carrito.Position[0], self.carrito.Position[1], self.carrito.Position[2]]
+                    
+                    # Mantén la dirección de la caja en [0.0, 0.0, 0.0] para evitar movimientos adicionales
+                    self.cajaActual.Direction = [0.0, 0.0, 0.0]
+
+                    # Incrementa el contador de cajas levantadas
+                    cajasLevantadas += 1
+                    if cajasLevantadas == ncajas:
+                        end_time = time.time()
+                        elapsed_time = end_time - start_time
+                        elapsed_time_rounded = round(elapsed_time, 2)
+                        print(f"Se levantaron todas las cajas en {elapsed_time_rounded} segundos")
+                        print(f"Hubo un total de {stepsTotales} steps por todos los robots")
+
 
 done = False
 Init()

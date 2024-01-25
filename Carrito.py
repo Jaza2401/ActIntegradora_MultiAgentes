@@ -67,6 +67,7 @@ class Carrito:
         self.dCol = 0
         #Estado
         self.estado = 0
+        self.rotation = [0.0, 0.0, 0.0]
         
     def drawCircle(self, radius, num_segments):
         glBegin(GL_POLYGON)
@@ -428,6 +429,8 @@ class Carrito:
     def draw(self):
         glPushMatrix()
         glTranslatef(self.Position[0], self.Position[1], self.Position[2])
+        self.rotate([self.Direction[0], 0.0, self.Direction[2]])
+        glRotatef(self.rotation[1], 0.0, 1.0, 0.0)
         glScaled(1,1,1)
         glColor3f(1.0, 1.0, 1.0)
         self.drawFaces()
@@ -455,4 +458,23 @@ class Carrito:
     def elevate(self):
         self.platform[:,1] += 0.1
         self.ymin += 0.1
+        
+    def rotate(self, direction):
+        # Calcula el ángulo actual de la dirección
+        current_angle = math.atan2(direction[2], direction[0])
+
+        # Añade 45 grados al ángulo actual
+        new_angle = current_angle + math.radians(45.0)
+
+        # Calcula las nuevas componentes x e z de la dirección girada
+        new_direction_x = math.cos(new_angle)
+        new_direction_z = math.sin(new_angle)
+
+        # Establece la nueva dirección girada
+        self.direction = [new_direction_x, 0.0, new_direction_z]
+
+        # Calcula la nueva rotación basada en la nueva dirección
+        self.rotation[1] = math.degrees(new_angle)
+
+        self.rotation[1] %= 360.0
         
