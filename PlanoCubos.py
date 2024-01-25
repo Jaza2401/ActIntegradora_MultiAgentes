@@ -258,6 +258,9 @@ class CarritoAgent(ap.Agent):
                 delta_z = target_z - self.carrito.Position[2]
                 distancia = math.sqrt(delta_x**2 + delta_z**2)
 
+                self.carrito.rotate(self.carrito.Direction)
+                self.carrito.rotate([delta_x, 0.0, delta_z])
+
                 delta_x_caja = target_x - self.cajaActual.Position[0]
                 delta_z_caja = target_z - self.cajaActual.Position[2]
                 distanciaCaja = math.sqrt(delta_x_caja**2 + delta_z_caja**2)
@@ -270,8 +273,8 @@ class CarritoAgent(ap.Agent):
                     self.carrito.Direction = [new_direction_x, 0.0, new_direction_z]
 
                     # Update rotation based on the direction
-                    self.carrito.rotate(self.carrito.Direction)           
-                    self.carrito.rotate([new_direction_x, 0.0, new_direction_z])
+                    # self.carrito.rotate(self.carrito.Direction)           
+                    # self.carrito.rotate([new_direction_x, 0.0, new_direction_z])
                     
                     # Move the cart based on the new direction
                     self.carrito.Position[0] += self.carrito.Direction[0]
