@@ -3,6 +3,7 @@
 
 import pygame
 from pygame.locals import *
+from queue import Queue
 
 # Cargamos las bibliotecas de OpenGL
 from OpenGL.GL import *
@@ -20,6 +21,8 @@ from Caja import Caja
 
 # Se carga la librería de agentpy
 import agentpy as ap
+
+import time
 
 screen_width = 500
 screen_height = 500
@@ -57,11 +60,13 @@ pygame.init()
 carritos = []
 agCarritos = []
 ncarritos = 5
+stepsTotales = 0
 
 #cajas = Caja(DimBoard, 1.0)
 cajas = []
 cajasEliminadas = []
 ncajas = 40
+cajasLevantadas = 0
 
 def Axis():
     glShadeModel(GL_FLAT)
@@ -184,6 +189,8 @@ class CarritoAgent(ap.Agent):
         self.cajaActual = None
 
     def step(self):
+        global stepsTotales
+        stepsTotales += 1
         # Poner el next y action
         p = self.see(cajas)
         self.next(p)
@@ -209,8 +216,10 @@ class CarritoAgent(ap.Agent):
                     self.cajaActual = caja
                     caja.elevated()
                     self.dCol = 1
-
+    
     def action(self):
+        global cajasLevantadas
+        global stepsTotales
         # Dependiendo de si se detecto colision, actualizar el estado del agente
         # No hay colisión, actualiza la posición
         new_x = self.carrito.Position[0] + self.carrito.Direction[0]
@@ -258,6 +267,13 @@ class CarritoAgent(ap.Agent):
                     self.cajaActual.Position[2] += self.cajaActual.Direction[2]
 
                 else:
+                    cajasLevantadas += 1
+                    if cajasLevantadas == ncajas:
+                        end_time = time.time()
+                        elapsed_time = end_time - start_time
+                        elapsed_time_rounded = round(elapsed_time, 2)
+                        print(f"Se levantaron todas las cajas en {elapsed_time_rounded} segundos")
+                        print(f"Hubo un total de {stepsTotales} steps por todos los robots")
                     # El carro ya está en el punto específico, no hay necesidad de cambiar la dirección
                     self.dCol = 0
                     self.carrito.reset()
@@ -265,6 +281,7 @@ class CarritoAgent(ap.Agent):
 
 done = False
 Init()
+start_time = time.time()
 while not done:
     handle_keys()
     for event in pygame.event.get():
