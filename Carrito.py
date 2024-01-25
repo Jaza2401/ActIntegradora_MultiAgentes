@@ -463,6 +463,7 @@ class Carrito:
         # Calcula el ángulo actual de la dirección
         current_angle = math.atan2(direction[2], direction[0])
 
+        # Invierte el ángulo de la dirección
         current_angle *= -1
         
         # Calcula las nuevas componentes x e z de la dirección girada
