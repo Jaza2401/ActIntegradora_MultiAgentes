@@ -300,26 +300,8 @@ class CarritoAgent(ap.Agent):
                     # El carro ya está en el punto específico, no hay necesidad de cambiar la dirección
                     self.dCol = 0
                     self.carrito.reset()
-                    #cajasEliminadas.append(self.cajaActual)
+                    cajasEliminadas.append(self.cajaActual)
                     
-                # Añade una comprobación para verificar si la caja llegó al destino
-                if distancia <= 2.0:
-                    # La caja ha llegado al destino, acomódala en el almacén
-                    self.cajaActual.Position = [self.carrito.Position[0], self.carrito.Position[1], self.carrito.Position[2]]
-                    
-                    # Mantén la dirección de la caja en [0.0, 0.0, 0.0] para evitar movimientos adicionales
-                    self.cajaActual.Direction = [0.0, 0.0, 0.0]
-
-                    # Incrementa el contador de cajas levantadas
-                    cajasLevantadas += 1
-                    if cajasLevantadas == ncajas:
-                        end_time = time.time()
-                        elapsed_time = end_time - start_time
-                        elapsed_time_rounded = round(elapsed_time, 2)
-                        print(f"Se levantaron todas las cajas en {elapsed_time_rounded} segundos")
-                        print(f"Hubo un total de {stepsTotales} steps por todos los robots")
-
-
 done = False
 Init()
 start_time = time.time()
