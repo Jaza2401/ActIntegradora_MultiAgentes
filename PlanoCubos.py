@@ -199,6 +199,7 @@ class CarritoAgent(ap.Agent):
     def see(self, c):
         # Logica para buscar caja cercana
         # Deteccion de colisiones
+        
         return c
 
     def next(self, p):
@@ -207,6 +208,14 @@ class CarritoAgent(ap.Agent):
             new_x = self.carrito.Position[0] + self.carrito.Direction[0]
             new_z = self.carrito.Position[2] + self.carrito.Direction[2]
             for caja in p:
+                if caja.estado == 2:
+                    continue
+                delta_x = caja.Position[0] - new_x
+                delta_z = caja.Position[2] - new_z
+                distancia = math.sqrt(delta_x**2 + delta_z**2)
+                new_direction_x = delta_x / distancia
+                new_direction_z = delta_z / distancia
+                self.carrito.Direction = [new_direction_x, 0.0, new_direction_z]
                 r1 = self.carrito.radius
                 r2 = caja.radius
                 cx = (caja.Position[0] - new_x)**2
