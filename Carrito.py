@@ -463,18 +463,18 @@ class Carrito:
         # Calcula el ángulo actual de la dirección
         current_angle = math.atan2(direction[2], direction[0])
 
-        # Añade 45 grados al ángulo actual
-        new_angle = current_angle + math.radians(45.0)
-
+        # Invierte el ángulo de la dirección
+        current_angle *= -1
+        
         # Calcula las nuevas componentes x e z de la dirección girada
-        new_direction_x = math.cos(new_angle)
-        new_direction_z = math.sin(new_angle)
+        new_direction_x = math.cos(current_angle)
+        new_direction_z = math.sin(current_angle)
 
         # Establece la nueva dirección girada
         self.direction = [new_direction_x, 0.0, new_direction_z]
 
         # Calcula la nueva rotación basada en la nueva dirección
-        self.rotation[1] = math.degrees(new_angle)
+        self.rotation[1] = math.degrees(current_angle)
 
         self.rotation[1] %= 360.0
         
